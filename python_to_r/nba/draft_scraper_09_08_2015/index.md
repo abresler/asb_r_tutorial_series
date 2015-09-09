@@ -404,8 +404,8 @@ random_player <-
 
 ```
 ## Congratulations you pulled in data for all 226 players from the 1983 Draft
-## Have you heard of the #43 pick, Pace Mannion?
-## He played 6 seasons & ranked #43 in his draft class for total points scored!
+## Have you heard of the #139 pick, Sedale Threatt?
+## He played 14 seasons & ranked #139 in his draft class for total points scored!
 ```
 
 <div class="ui basic segment">
@@ -686,8 +686,8 @@ data <-
 
 ```
 ## Congratulations you pulled in data for all 60 players from the 2013 Draft
-## Have you heard of the #22 pick, Mason Plumlee?
-## He played 2 seasons & ranked #9 in his draft class for total points scored!
+## Have you heard of the #11 pick, Michael Carter-Williams?
+## He played 2 seasons & ranked #2 in his draft class for total points scored!
 ```
 <div class="ui basic segment">
 <p class = 'ui center aligned'>Let's examine some of the results.</p>
@@ -841,8 +841,8 @@ all_data <-
 
 ```
 ## Congratulations you pulled in data for 7789 players from the 1947 to 2015 drafts
-## Have you heard of the #18 pick in the 1965 Draft, Keith Erickson?
-## He played 12 seasons & ranks #512 all time in total points scored during your selected draft eras!
+## Have you heard of the #11 pick in the 2011 Draft, Klay Thompson?
+## He played 4 seasons & ranks #719 all time in total points scored during your selected draft eras!
 ```
 
 ```r
@@ -873,3 +873,16 @@ all_data %>%
 |    1997    |    1     |    1    |     Tim Duncan      |   San Antonio Spurs    |         18          |   25,974   |     19.5     |     11.0     |     3.1      |    201.2    |
 |    1995    |    1     |    5    |    Kevin Garnett    | Minnesota Timberwolves |         20          |   25,949   |     18.2     |     10.2     |     3.8      |    190.4    |
 |    1998    |    1     |   10    |     Paul Pierce     |     Boston Celtics     |         17          |   25,899   |     20.7     |     5.8      |     3.7      |    149.1    |
+
+<div class="ui basic segment">
+<p class = 'ui center aligned'>We did it ladies and gentleman.  We now have a function that can pull in any and all NBA or BAA drafts we give it.</p>
+<p>Today's tutorial ends here but we now have refined data gold ready for all sorts of interesting data analysis and visualization, things R also excels at.</p>
+</div>
+
+
+<div class="ui basic segment">
+<p class = 'ui center aligned'>We did it ladies and gentleman.  We now have a function that can pull in any and all NBA or BAA drafts we give it.</p>
+<img class = "ui centered large image" src="http://www.survivingcollege.com/wp-content/uploads/2013/04/tumblr_mlmzl1vRWd1soiqg9o2_500.gif" title = "Jeah">
+<p>Today's tutorial ends here but we now have refined data gold ready for all sorts of interesting data analysis and visualization, things R also excels at.  Check back soon and I will have a new tutorial doing just this.</p>
+<p>I hope you enjoyed this and recognize that R can do anything that Python does with ease and grace and if you ever hear someone say R isn't good at web-scraping you can shake your head and laugh!</p>
+</div>

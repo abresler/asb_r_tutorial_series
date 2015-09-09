@@ -780,3 +780,11 @@ all_data %>%
 <p class = 'ui center aligned'>We did it ladies and gentleman.  We now have a function that can pull in any and all NBA or BAA drafts we give it.</p>
 <p>Today's tutorial ends here but we now have refined data gold ready for all sorts of interesting data analysis and visualization, things R also excels at.</p>
 </div>
+
+<div class="ui basic ui inverted blue segment"><h2 class="ui header">Parting Notes</h2></div>
+<div class="ui basic segment">
+<p class = 'ui center aligned'>We did it ladies and gentleman.  We now have a function that can pull in any and all NBA or BAA drafts we give it.</p>
+<img class = "ui centered large image" src="http://www.survivingcollege.com/wp-content/uploads/2013/04/tumblr_mlmzl1vRWd1soiqg9o2_500.gif" title = "Jeah">
+<p>Today's tutorial ends here but we now have refined data gold ready for all sorts of interesting data analysis and visualization, things R also excels at.  Check back soon and I will have a new tutorial doing just this.</p>
+<p>I hope you enjoyed this and recognize that R can do anything that Python does with ease and grace and if you ever hear someone say R isn't good at web-scraping you can shake your head and laugh!</p>
+</div>
