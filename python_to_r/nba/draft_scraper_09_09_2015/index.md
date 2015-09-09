@@ -1,17 +1,5 @@
----
-title: "R You Down with NBA Draft Scrapers?"
-author: <a href="https://twitter.com/abresler" target="_blank">Alex Bresler</a>
-date: "September 8, 2015"
-output: 
-  html_document: 
-    css: ~/Desktop/asb_r_tutorial_series/python_to_r/nba/draft_scraper_09_08_2015/semantic/dist/semantic.css
-    keep_md: yes
-    self_contained: no
----
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
+
 
 <div class="ui basic inverted segment"><h2 class="ui green header">What's the Dealio?</h2></div>
 
@@ -40,7 +28,8 @@ The next thing you need to do is to make sure you have necessary packages instal
 </p>
 </div>
 
-```{r eval=TRUE, tidy=F, results='hide', message=FALSE, warning=FALSE}
+
+```r
 packages <- #These are the packages we need
   c(
     'devtools', # install.packages(devtools)
@@ -101,8 +90,8 @@ Clean the Data
 <p>Also try to following along with my comments by looking for <code>#</code></p>
 </div>
 
-```{r eval=TRUE, tidy=F, warning= F}
 
+```r
 draft_year <- #my pick
   1983
 
@@ -152,7 +141,10 @@ url.draft_year <-
   paste0(draft_year, '.html')
 
 url.draft_year #our url with the data and it should work for any draft year!
+```
 
+```
+## [1] "http://www.basketball-reference.com/draft/NBA_1983.html"
 ```
 
 <div class="ui basic segment">
@@ -161,7 +153,8 @@ url.draft_year #our url with the data and it should work for any draft year!
 </div>
 
 
-```{r eval=TRUE, tidy=F, warning= F}
+
+```r
 page <- #get the html from the page into R
   url.draft_year %>%
   read_html
@@ -259,7 +252,33 @@ raw_data %<>%
   )
 raw_data %>% 
   glimpse #explore the data!
+```
 
+```
+## Observations: 226
+## Variables: 22
+## $ id.round            (dbl) 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, ...
+## $ id.pick             (dbl) 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13,...
+## $ id.bref.team        (chr) "HOU", "IND", "HOU", "SDC", "CHI", "GSW", ...
+## $ player              (chr) "Ralph Sampson", "Steve Stipanovich", "Rod...
+## $ college             (chr) "University of Virginia", "University of M...
+## $ totals.years_played (dbl) 9, 5, 10, 14, 10, 1, 12, 16, 17, 13, 16, 1...
+## $ totals.g            (dbl) 456, 403, 768, 1073, 679, 45, 928, 987, 12...
+## $ totals.mp           (dbl) 13591, 12591, 24876, 30152, 13247, 354, 24...
+## $ totals.pts          (dbl) 7039, 5323, 9014, 15097, 5080, 166, 11834,...
+## $ totals.trb          (dbl) 4011, 3131, 5087, 2987, 4128, 82, 4718, 33...
+## $ totals.ast          (dbl) 1038, 938, 2750, 2729, 635, 22, 1298, 1086...
+## $ shooting.fg_pct     (dbl) 0.486, 0.484, 0.503, 0.482, 0.454, 0.571, ...
+## $ shooting.3p_pct     (dbl) 0.172, 0.179, 0.260, 0.370, 0.037, NA, 0.1...
+## $ shooting.ft_pct     (dbl) 0.661, 0.796, 0.761, 0.833, 0.738, 0.418, ...
+## $ per_game.mp         (dbl) 29.8, 31.2, 32.4, 28.1, 19.5, 7.9, 26.8, 2...
+## $ per_game.pts        (dbl) 15.4, 13.2, 11.7, 14.1, 7.5, 3.7, 12.8, 9....
+## $ per_game.trb        (dbl) 8.8, 7.8, 6.6, 2.8, 6.1, 1.8, 5.1, 3.4, 3....
+## $ per_game.ast        (dbl) 2.3, 2.3, 3.6, 2.5, 0.9, 0.5, 1.4, 1.1, 1....
+## $ advanced.ws         (dbl) 20.1, 30.4, 56.0, 75.2, 17.4, 0.8, 45.0, 4...
+## $ advanced.ws_per_48  (dbl) 0.071, 0.116, 0.108, 0.120, 0.063, 0.106, ...
+## $ advanced.bpm        (dbl) 0.0, 1.1, 1.6, 0.4, -2.7, -1.8, -1.3, -0.6...
+## $ advanced.vorp       (dbl) 6.8, 9.9, 23.0, 18.6, -2.5, 0.0, 4.2, 7.0,...
 ```
 
 <div class="ui basic segment">
@@ -293,8 +312,8 @@ Add Fun Message
 <p>After collecting and importing that data we will merge it do the raw data and we will be done.  I also like to add fun messages to my code, especially when functions are built around it, that's coming next folks.  Messages show you that your code is done running and can be tailored to, make you laugh, feel good about your work, or as in this case, learn a new fact.</p>
 </div>
 
-```{r eval=TRUE, tidy=F, warning= F}
-    
+
+```r
 player <-
   page %>%
   html_nodes('td:nth-child(4) a') %>% #get the player names to resolve against our data table
@@ -380,17 +399,35 @@ random_player <-
   message
 ```
 
+```
+## Congratulations you pulled in data for all 226 players from the 1983 Draft
+## Have you heard of the #2 pick, Steve Stipanovich?
+## He played 5 seasons & ranked #2 in his draft class for total points scored!
+```
+
 <div class="ui basic segment">
 <p>Let's take a quick look at a snapshot of the data</p>
 </div>
 
-```{r results='asis', eval=TRUE, echo=TRUE}
+
+```r
 data %>% 
   select(id.round, id.pick, player, team, totals.years_played, totals.pts) %>%
   mutate(totals.pts = totals.pts %>% comma(digits = 0)) %>% #some formating
   head %>% 
   format_table(align = 'c')
 ```
+
+
+
+| id.round | id.pick |      player       |         team          | totals.years_played | totals.pts |
+|:--------:|:-------:|:-----------------:|:---------------------:|:-------------------:|:----------:|
+|    1     |    1    |   Ralph Sampson   |    Houston Rockets    |          9          |   7,039    |
+|    1     |    2    | Steve Stipanovich |    Indiana Pacers     |          5          |   5,323    |
+|    1     |    3    |   Rodney McCray   |    Houston Rockets    |         10          |   9,014    |
+|    1     |    4    |    Byron Scott    |  San Diego Clippers   |         14          |   15,097   |
+|    1     |    5    |   Sidney Green    |     Chicago Bulls     |         10          |   5,080    |
+|    1     |    6    |   Russell Cross   | Golden State Warriors |          1          |    166     |
 
 <div class="ui basic segment">
 <img class = "ui centered medium image" src='http://i.imgur.com/Cp62j1q.gif'>
@@ -401,7 +438,8 @@ data %>%
 <p class = 'ui center aligned'>Now that we know our code works let's build a function that takes a draft year and returns a data frame with the cleaned and resolve data.  We want to the function to inherit the smarts we looked at earlier and we will add an option as to whether our special message will be returned upon execution of the function. </p>
 </div>
 
-```{r eval=TRUE, tidy=F, warning= F}
+
+```r
 get_nba_year_draft_data <-
   function(draft_year = 1984,
            return_message = T) {
@@ -637,21 +675,48 @@ get_nba_year_draft_data <-
 <p>Ok let's take her for a whirl and examine the 2013 draft.</p>
 </div>
 
-```{r results='asis', eval=TRUE, echo=TRUE}
+
+```r
 data <- 
   get_nba_year_draft_data(draft_year = 2013,return_message = T)
+```
 
+```
+## Congratulations you pulled in data for all 60 players from the 2013 Draft
+## Have you heard of the #25 pick, Reggie Bullock?
+## He played 2 seasons & ranked #34 in his draft class for total points scored!
 ```
 <div class="ui basic segment">
 <p class = 'ui center aligned'>Let's examine some of the results.</p>
 </div>
-```{r results='asis', eval=TRUE, echo=TRUE}
+
+```r
 data %>% 
   select(id.round, id.pick, player, team, totals.years_played, totals.pts, per_game.pts, per_game.trb, per_game.ast, advanced.ws) %>%
   mutate(totals.pts = totals.pts %>% comma(digits = 0)) %>% #some formating
   head(15) %>% #lets do the top 15 picks
   format_table(align = 'c')
 ```
+
+
+
+| id.round | id.pick |          player          |          team          | totals.years_played | totals.pts | per_game.pts | per_game.trb | per_game.ast | advanced.ws |
+|:--------:|:-------:|:------------------------:|:----------------------:|:-------------------:|:----------:|:------------:|:------------:|:------------:|:-----------:|
+|    1     |    1    |     Anthony Bennett      |  Cleveland Cavailers   |          2          |    515     |     4.7      |     3.4      |     0.6      |    -0.1     |
+|    1     |    2    |      Victor Oladipo      |     Orlando Magic      |          2          |   2,398    |     15.8     |     4.2      |     4.1      |     4.8     |
+|    1     |    3    |       Otto Porter        |   Washington Wizards   |          2          |    523     |     4.7      |     2.5      |     0.7      |     2.7     |
+|    1     |    4    |       Cody Zeller        |   Charlotte Hornets    |          2          |    962     |     6.7      |     5.0      |     1.3      |     6.5     |
+|    1     |    5    |         Alex Len         |      Phoenix Suns      |          2          |    518     |     4.7      |     5.0      |     0.3      |     3.6     |
+|    1     |    6    |       Nerlens Noel       |  New Orleans Hornets   |          1          |    744     |     9.9      |     8.1      |     1.7      |     4.0     |
+|    1     |    7    |       Ben McLemore       |    Sacramento Kings    |          2          |   1,716    |     10.5     |     2.9      |     1.4      |     3.3     |
+|    1     |    8    | Kentavious Caldwell-Pope |    Detroit Pistons     |          2          |   1,513    |     9.3      |     2.5      |     1.0      |     4.6     |
+|    1     |    9    |        Trey Burke        | Minnesota Timberwolves |          2          |   1,868    |     12.8     |     2.8      |     5.0      |     3.3     |
+|    1     |   10    |      C.J. McCollum       | Portland Trailblazers  |          2          |    625     |     6.3      |     1.4      |     0.9      |     2.0     |
+|    1     |   11    | Michael Carter-Williams  |   Philadelphia 76ers   |          2          |   2,133    |     15.7     |     5.8      |     6.5      |     2.1     |
+|    1     |   12    |       Steven Adams       | Oklahoma City Thunder  |          2          |    802     |     5.3      |     5.7      |     0.7      |     7.0     |
+|    1     |   13    |       Kelly Olynyk       |    Dallas Mavericks    |          2          |   1,263    |     9.4      |     5.0      |     1.6      |     6.5     |
+|    1     |   14    |     Shabazz Muhammad     |       Utah Jazz        |          2          |    655     |     8.7      |     2.8      |     0.7      |     2.3     |
+|    1     |   15    |  Giannis Antetokounmpo   |    Milwaukee Bucks     |          2          |   1,555    |     9.8      |     5.6      |     2.3      |     7.4     |
 <div class="ui basic segment">
 <div class="ui black segment">Oh Anthony Bennett.....</p></div>
 <img class = "ui centered large image" src="https://usatthebiglead.files.wordpress.com/2014/01/anthony-bennett-jumps-when-touched-with-powerade-against-knicks.gif" title = "Anthony Bennett">
@@ -673,7 +738,8 @@ Scale Up the Function
 <p>Let's build and test that function, it's what we set out to today and won't be much more work!</p>
 </div>
 
-```{r eval=TRUE, tidy=F, warning= F}
+
+```r
 get_all_nba_draft_data <- function(year_start = NA, year_end = NA,
                                    include_baa = T, return_message = T) {
   
@@ -764,10 +830,19 @@ get_all_nba_draft_data <- function(year_start = NA, year_end = NA,
 }
 ```
 
-```{r results='asis', eval=TRUE, echo=TRUE}
+
+```r
 all_data <- 
   get_all_nba_draft_data()
+```
 
+```
+## Congratulations you pulled in data for 7789 players from the 1947 to 2015 drafts
+## Have you heard of the #14 pick in the 1975 Draft, Joe Bryant?
+## He played 8 seasons & ranks #731 all time in total points scored during your selected draft eras!
+```
+
+```r
 all_data %>% 
   select(year.draft, id.round, id.pick, player, team, totals.years_played, totals.pts, per_game.pts, per_game.trb, per_game.ast, advanced.ws) %>%
   arrange(desc(totals.pts)) %>% 
@@ -775,6 +850,26 @@ all_data %>%
   head(15) %>% #lets do the top 15 picks
   format_table(align = 'c')
 ```
+
+
+
+| year.draft | id.round | id.pick |       player        |          team          | totals.years_played | totals.pts | per_game.pts | per_game.trb | per_game.ast | advanced.ws |
+|:----------:|:--------:|:-------:|:-------------------:|:----------------------:|:-------------------:|:----------:|:------------:|:------------:|:------------:|:-----------:|
+|    1969    |    1     |    1    | Kareem Abdul-Jabbar |    Milwaukee Bucks     |         20          |   38,387   |     24.6     |     11.2     |     3.6      |    273.4    |
+|    1985    |    1     |   13    |     Karl Malone     |       Utah Jazz        |         19          |   36,928   |     25.0     |     10.1     |     3.6      |    234.6    |
+|    1996    |    1     |   13    |     Kobe Bryant     |   Charlotte Hornets    |         19          |   32,482   |     25.4     |     5.3      |     4.8      |    173.1    |
+|    1984    |    1     |    3    |   Michael Jordan    |     Chicago Bulls      |         15          |   32,292   |     30.1     |     6.2      |     5.3      |    214.0    |
+|    1959    |    NA    |   NA    |  Wilt Chamberlain   | Philadelphia Warriors  |         14          |   31,419   |     30.1     |     22.9     |     4.4      |    247.3    |
+|    1992    |    1     |    1    |  Shaquille O'Neal   |     Orlando Magic      |         19          |   28,596   |     23.7     |     10.9     |     2.5      |    181.7    |
+|    1998    |    1     |    9    |    Dirk Nowitzki    |    Milwaukee Bucks     |         17          |   28,119   |     22.2     |     7.9      |     2.6      |    192.0    |
+|    1968    |    1     |    1    |     Elvin Hayes     |   San Diego Rockets    |         16          |   27,313   |     21.0     |     12.5     |     1.8      |    120.8    |
+|    1984    |    1     |    1    |   Hakeem Olajuwon   |    Houston Rockets     |         18          |   26,946   |     21.8     |     11.1     |     2.5      |    162.8    |
+|    1960    |    1     |    1    |   Oscar Robertson   |   Cincinnati Royals    |         14          |   26,710   |     25.7     |     7.5      |     9.5      |    189.2    |
+|    1982    |    1     |    3    |  Dominique Wilkins  |       Utah Jazz        |         15          |   26,668   |     24.8     |     6.7      |     2.5      |    117.5    |
+|    1962    |    1     |    7    |    John Havlicek    |     Boston Celtics     |         16          |   26,395   |     20.8     |     6.3      |     4.8      |    131.7    |
+|    1997    |    1     |    1    |     Tim Duncan      |   San Antonio Spurs    |         18          |   25,974   |     19.5     |     11.0     |     3.1      |    201.2    |
+|    1995    |    1     |    5    |    Kevin Garnett    | Minnesota Timberwolves |         20          |   25,949   |     18.2     |     10.2     |     3.8      |    190.4    |
+|    1998    |    1     |   10    |     Paul Pierce     |     Boston Celtics     |         17          |   25,899   |     20.7     |     5.8      |     3.7      |    149.1    |
 
 <div class="ui basic segment">
 <p class = 'ui center aligned'>We did it ladies and gentleman.  We now have a function that can pull in any and all NBA or BAA drafts we give it.</p>
@@ -787,4 +882,22 @@ all_data %>%
 <img class = "ui centered large image" src="http://www.survivingcollege.com/wp-content/uploads/2013/04/tumblr_mlmzl1vRWd1soiqg9o2_500.gif" title = "Jeah">
 <p>Today's tutorial ends here but we now have refined data gold ready for all sorts of interesting data analysis and visualization, things R also excels at.  Check back soon and I will have a new tutorial doing just this.</p>
 <p>I hope you enjoyed this and recognize that R can do anything that Python does with ease and grace and if you ever hear someone say R isn't good at web-scraping you can shake your head and laugh!</p>
+<div class="ui basic ui inverted blue segment"><h2 class="ui header">Parting Notes</h2></div>
+<div class="ui basic segment">
+<p class = 'ui center aligned'>We did it ladies and gentleman.  We now have a function that can pull in any and all NBA or BAA drafts we give it.</p>
+<img class = "ui centered large image" src="http://www.survivingcollege.com/wp-content/uploads/2013/04/tumblr_mlmzl1vRWd1soiqg9o2_500.gif" title = "Jeah">
+<p>Today's tutorial ends here but we now have refined data gold ready for all sorts of interesting data analysis and visualization, things R also excels at.  Check back soon and I will have a new tutorial doing just this.</p>
+<p>I hope you enjoyed this and recognize that R can do anything that Python does with ease and grace and if you ever hear someone say R isn't good at web-scraping you can shake your head and laugh!</p>
+<p>You can find the code for the functions <a href = 'https://github.com/abresler/asb_r_tutorial_series/tree/master/python_to_r/nba/draft_scraper_09_08_2015/code' target = '_blank'>here</a> and I urge you to download or fork the repo and use the code whenever you need it!</p>
+</div>
+
+<div class="ui inverted red circular segment">
+<h2 class="ui inverted header">
+Shout
+</h2>
+</div>
+<div class="ui inverted circular segment">
+<h2 class="ui inverted header">
+Outs
+</h2>
 </div>

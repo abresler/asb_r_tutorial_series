@@ -19,7 +19,7 @@ lapply(packages, library, character.only = T)
 get_all_nba_draft_data <- function(year_start = NA, year_end = NA,
                                    include_baa = T, return_message = T) {
   get_nba_year_draft_data <-
-    function(draft_year = 1984,
+    function(draft_year = 1983,
              return_message = T) {
       options(warn = -1)
       #Make Smart Draft Years

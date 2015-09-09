@@ -8,10 +8,9 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
 
-<meta name="author" content="Alex Bresler" />
 
 
-<title>R You Down with NBA Draft Scrapers?</title>
+<title></title>
 
 <script src="index_files/jquery-1.11.0/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -45,7 +44,7 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 </script>
 
 
-<link rel="stylesheet" href="/Users/alexbresler/Desktop/asb_r_tutorial_series/python_to_r/nba/draft_scraper_09_08_2015/semantic/dist/semantic.css" type="text/css" />
+<link rel="stylesheet" href="/Users/alexbresler/Desktop/asb_r_tutorial_series/python_to_r/nba/draft_scraper_09_09_2015/semantic/dist/semantic.css" type="text/css" />
 
 </head>
 
@@ -69,11 +68,6 @@ img {
 <div class="container-fluid main-container">
 
 
-<div id="header">
-<h1 class="title">R You Down with NBA Draft Scrapers?</h1>
-<h4 class="author"><em><a href="https://twitter.com/abresler" target="_blank">Alex Bresler</a></em></h4>
-<h4 class="date"><em>September 8, 2015</em></h4>
-</div>
 
 
 <div class="ui basic inverted segment">
@@ -489,8 +483,8 @@ random_player &lt;-
   ) %&gt;%
   message</code></pre>
 <pre><code>## Congratulations you pulled in data for all 226 players from the 1983 Draft
-## Have you heard of the #139 pick, Sedale Threatt?
-## He played 14 seasons &amp; ranked #139 in his draft class for total points scored!</code></pre>
+## Have you heard of the #2 pick, Steve Stipanovich?
+## He played 5 seasons &amp; ranked #2 in his draft class for total points scored!</code></pre>
 <div class="ui basic segment">
 <p>
 Let’s take a quick look at a snapshot of the data
@@ -813,8 +807,8 @@ Ok let’s take her for a whirl and examine the 2013 draft.
 <pre class="r"><code>data &lt;- 
   get_nba_year_draft_data(draft_year = 2013,return_message = T)</code></pre>
 <pre><code>## Congratulations you pulled in data for all 60 players from the 2013 Draft
-## Have you heard of the #11 pick, Michael Carter-Williams?
-## He played 2 seasons &amp; ranked #2 in his draft class for total points scored!</code></pre>
+## Have you heard of the #25 pick, Reggie Bullock?
+## He played 2 seasons &amp; ranked #34 in his draft class for total points scored!</code></pre>
 <div class="ui basic segment">
 <p class="ui center aligned">
 Let’s examine some of the results.
@@ -1139,8 +1133,8 @@ Let’s build and test that function, it’s what we set out to today and won’
 <pre class="r"><code>all_data &lt;- 
   get_all_nba_draft_data()</code></pre>
 <pre><code>## Congratulations you pulled in data for 7789 players from the 1947 to 2015 drafts
-## Have you heard of the #11 pick in the 2011 Draft, Klay Thompson?
-## He played 4 seasons &amp; ranks #719 all time in total points scored during your selected draft eras!</code></pre>
+## Have you heard of the #14 pick in the 1975 Draft, Joe Bryant?
+## He played 8 seasons &amp; ranks #731 all time in total points scored during your selected draft eras!</code></pre>
 <pre class="r"><code>all_data %&gt;% 
   select(year.draft, id.round, id.pick, player, team, totals.years_played, totals.pts, per_game.pts, per_game.trb, per_game.ast, advanced.ws) %&gt;%
   arrange(desc(totals.pts)) %&gt;% 
@@ -1369,6 +1363,11 @@ We did it ladies and gentleman. We now have a function that can pull in any and 
 Today’s tutorial ends here but we now have refined data gold ready for all sorts of interesting data analysis and visualization, things R also excels at.
 </p>
 </div>
+<div class="ui basic ui inverted blue segment">
+<h2 class="ui header">
+Parting Notes
+</h2>
+</div>
 <div class="ui basic segment">
 <p class="ui center aligned">
 We did it ladies and gentleman. We now have a function that can pull in any and all NBA or BAA drafts we give it.
@@ -1380,6 +1379,35 @@ Today’s tutorial ends here but we now have refined data gold ready for all sor
 <p>
 I hope you enjoyed this and recognize that R can do anything that Python does with ease and grace and if you ever hear someone say R isn’t good at web-scraping you can shake your head and laugh!
 </p>
+<div class="ui basic ui inverted blue segment">
+<h2 class="ui header">
+Parting Notes
+</h2>
+</div>
+<div class="ui basic segment">
+<p class="ui center aligned">
+We did it ladies and gentleman. We now have a function that can pull in any and all NBA or BAA drafts we give it.
+</p>
+<img class = "ui centered large image" src="http://www.survivingcollege.com/wp-content/uploads/2013/04/tumblr_mlmzl1vRWd1soiqg9o2_500.gif" title = "Jeah">
+<p>
+Today’s tutorial ends here but we now have refined data gold ready for all sorts of interesting data analysis and visualization, things R also excels at. Check back soon and I will have a new tutorial doing just this.
+</p>
+<p>
+I hope you enjoyed this and recognize that R can do anything that Python does with ease and grace and if you ever hear someone say R isn’t good at web-scraping you can shake your head and laugh!
+</p>
+<p>
+You can find the code for the functions <a href = 'https://github.com/abresler/asb_r_tutorial_series/tree/master/python_to_r/nba/draft_scraper_09_08_2015/code' target = '_blank'>here</a> and I urge you to download or fork the repo and use the code whenever you need it!
+</p>
+</div>
+<div class="ui inverted red circular segment">
+<h2 class="ui inverted header">
+Shout
+</h2>
+</div>
+<div class="ui inverted circular segment">
+<h2 class="ui inverted header">
+Outs
+</h2>
 </div>
 
 
