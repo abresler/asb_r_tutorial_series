@@ -1,5 +1,5 @@
-source('python_to_r/nba/draft_scraper_09_08_2015/code/get_all_draft_data.R') #wherever the functions are saved
-source('python_to_r/nba/draft_scraper_09_08_2015/code/get_draft_year_data.R')
+source('python_to_r/nba/draft_scraper_09_09_2015/code/get_all_draft_data.R') #wherever the functions are saved
+source('python_to_r/nba/draft_scraper_09_09_2015/code/get_draft_year_data.R')
 
 test1970 <- 
   get_nba_year_draft_data(draft_year = 1970)

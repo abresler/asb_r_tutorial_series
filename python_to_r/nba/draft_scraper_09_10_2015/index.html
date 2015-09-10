@@ -10,7 +10,7 @@
 
 
 
-<title></title>
+<title>NBA Draft Scraping in R</title>
 
 <script src="index_files/jquery-1.11.0/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -44,7 +44,7 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 </script>
 
 
-<link rel="stylesheet" href="/Users/alexbresler/Desktop/asb_r_tutorial_series/python_to_r/nba/draft_scraper_09_09_2015/semantic/dist/semantic.css" type="text/css" />
+<link rel="stylesheet" href="/Users/alexbresler/Desktop/asb_r_tutorial_series/python_to_r/nba/draft_scraper_09_10_2015/semantic/dist/semantic.css" type="text/css" />
 
 </head>
 
@@ -60,9 +60,9 @@ code {
   color: inherit;
   background-color: rgba(0, 0, 0, 0.04);
 }
-img { 
-  max-width:100%; 
-  height: auto; 
+img {
+  max-width:100%;
+  height: auto;
 }
 </style>
 <div class="container-fluid main-container">
@@ -70,52 +70,88 @@ img {
 
 
 
-<div class="ui basic inverted segment">
-<h2 class="ui green header">
+<div class="ui center aligned basic inverted segment">
+<h2 class="ui center aligned green header">
 What’s the Dealio?
 </h2>
 </div>
-<div class="ui basic segment">
+<div class="ui center aligned basic segment">
 <p>
-This is the first of what I hope will be on an ongoing series with the excellent hoops heads over at <a href='http://nyloncalculus.com' target='_blank'>Nylon Calculus</a> that explore learning Data Science through the beautiful lense of NBA Basketball. This tutorial will teach you how to recreate <a href='https://twitter.com/Savvas_tj' target='_blank'>Savvas Tjortjoglou’s</a> fantastic piece on using <a href='http://python.org/' target='_blank'>Python</a> to <a href='http://nyloncalculus.com/2015/09/07/nylon-calculus-101-data-scraping-with-python//' target='_blank'>extract NBA historic draft data</a>. If you have yet to read the piece I highly recommend you do so before working through this tutorial.
+This is the first of what I hope will be on an ongoing series with the world class hoops heads at <a href='http://nyloncalculus.com' target='_blank'>Nylon Calculus</a> exploring learning Data Science through NBA Basketball. This tutorial will teach you how to recreate the results of <a href='https://twitter.com/Savvas_tj' target='_blank'>Savvas Tjortjoglou’s</a> fantastic piece on using <a href='http://python.org/' target='_blank'>Python</a> to <a href='http://nyloncalculus.com/2015/09/07/nylon-calculus-101-data-scraping-with-python//' target='_blank'>extract historic NBA draft data</a> except we will be using R.  I've also decided to add a few new things to mix it up a little bit as well. Finally, if you have yet to read Savvas's piece I highly recommend you do so.
 </p>
 </div>
-<div class="ui basic ui inverted red segment">
+<div class="ui center aligned basic ui inverted red segment">
 <h2 class="ui header">
 Word of Caution
 </h2>
 </div>
-<div class="ui basic segment">
+<div class="ui center aligned basic segment">
 <p>
-This and any future tutorials are not intended taken as:
+This and any future tutorials are not intended to be construed as:
 </p>
-<li>
+<div class="ui bulleted divided list">
+ <div class="item">
 An endorsement of R as the best programming language.
-</li>
-<li>
-A characterization of Python as a bad language.
-</li>
-<p><br> As I detailed in my <a href='http://asbcllc.com/presentations/si_hackathon/#/' target='_blank'>Sports Illustrated Hackathon keynote presentation</a>, it doesn’t matter which programming language you pick so long as you master it to empower yourself with MacGuyver like powers. Any of the major programming languages {R, Python, JavaScript, C, ect..} with some work will let you do the truly amazing things programming languages can do!</p>
-<p>That said, this and future tutorials <strong>are</strong> intended to destroy some misconceptions about the language that I love, <a href='https://en.wikipedia.org/wiki/R_(programming_language)' target='_blank'>R</a>. There are myths you may come across that imply R is inferior to Python for webscraping, that it’s syntax doesn’t make sense and that the language is too hard to learn. None of these things are true and I hope by the end of this post, whatever existing programming language of choice is, learned or intended to be learned, you won’t disagree with this statement.</p>
 </div>
-<div class="ui inverted basic segment">
+<div class="item">
+A characterization of Python as a bad or inferior language.
+</div>
+<br>
+<p>
+As I detailed in my <a href='http://asbcllc.com/presentations/si_hackathon/#/' target='_blank'>Sports Illustrated Hackathon keynote presentation</a>, it doesn’t matter which programming language you pick so long as you master it to and use your skills to solve problems.
+</p>
+<p>
+Any of the major programming languages {R, Python, JavaScript, C, ect..} with some expertise empower you to do the truly amazing things that programming languages can do! If you are a true amateur I’d advocate taking some time to learn about the major languages and then deciding which you think is best suited for you to learn.
+</p>
+<p>
+That said, this and future tutorials <strong>are</strong> intended to destroy some misconceptions about the language that I love, <a href='https://en.wikipedia.org/wiki/R_(programming_language)' target='_blank'>R</a>. There are myths you may come across that imply R is inferior to Python for web-scraping, that it’s syntax doesn’t make sense and that the language is too hard to learn.
+<p><strong>None of these things are true</strong> and I hope by the end of this post, whatever your existing programming language of choice is, learned or intended to be learned, you won’t disagree with this statement.</p>
+</div>
+<div class="ui center aligned inverted basic segment">
 <h2 class="ui yellow header">
 Enough of the Boring Stuff, Let’s Gokul
 </h2>
+<i class="yellow send outline icon"></i>
+<i class="red send outline icon"></i>
+<i class="blue send outline icon"></i>
+<i class="purple wizard icon"></i>
+<i class="pink wizard icon"></i>
+<i class="olive wizard icon"></i>
 </div>
+<div class="ui center aligned basic segment">
 <p><img class = "ui centered large image" src="http://static2.businessinsider.com/image/51a7a46369bedd4e01000009/gokel.gif" title = "My Boy Gokul"></p>
-<div class="ui basic segment">
 <p>
-In order to get started we need to make sure you have got all the necessary tools for today’s exploration. First make sure you have <a href="http://cran.r-project.org/" target='_blank'>R</a> and <a href="http://www.rstudio.com/products/rstudio/" target='_blank'>RStudio</a> installed. Then if you don’t already use <a href="https://www.mozilla.org/en-US/firefox/new/" target='_blank'>Firefox</a> or <a href="http://www.google.com/chrome/" target='_blank'>Chrome</a> pick a browser horse and install it. Finally, launch your chosen browse and install the <em>fantastic</em> <a href="http://selectorgadget.com/" target='_blank'>SelectorGadget</a> widget. Fire up <img src="http://www.rstudio.com/wp-content/uploads/2014/06/RStudio-Ball.png" alt="" height = "30px" width = "30px">, because it’s game time.
-</p>
-<p>
-The next thing you need to do is to make sure you have necessary packages installed. I am using the development versions of many of these packages and I have referenced the github repos in the comments for those who need to install them just copy and paste starting at <code>devtools::</code> until the end the line. For the non development packages just copy and paste starting from <code>install.packages</code>.
-</p>
+In order to complete today’s tutorial you are going to ensure your computer is locked and load with a few things.
+<div class="ui bulleted divided list">
+ <div class="item">
+First make sure you have <a href="http://cran.r-project.org/" target='_blank'>R</a> and <a href="http://www.rstudio.com/products/rstudio/" target='_blank'>RStudio</a> installed.
 </div>
+<div class="item">
+Then if you don’t already use <a href="https://www.mozilla.org/en-US/firefox/new/" target='_blank'>Firefox</a> or <a href="http://www.google.com/chrome/" target='_blank'>Chrome</a> pick a browser install it.
+</div>
+<div class="item">
+Finally, launch your chosen browse and install the <em>fantastic</em> <a href="http://selectorgadget.com/" target='_blank'>SelectorGadget</a> widget.
+</div>
+</div>
+<br>
+<div class="ui center aligned steps">
+  <div class="step">
+  <div class="title">Fire up <img src="http://www.rstudio.com/wp-content/uploads/2014/06/RStudio-Ball.png" alt="" height = "30px" width = "30px">
+</div>
+<div class="description">
+  It’s game time.
+  </div>
+  </div>
+  </div>
+</div>
+</div>
+<p>
+The final step before we are ready for action is to ensure you have the necessary R packages installed and loaded. I am using the development version of many of these packages, so a word caution there. </p>
+<p>For those who need to install the packages, I’ve referenced the github repos in the comments, just copy and paste the code starting at <code>devtools::</code> until the end the line into the console or in a script that you can run. For the non development packages just copy and paste starting from <code>install.packages</code> and do the same as before.</p>
 <pre class="r"><code>packages &lt;- #These are the packages we need
   c(
     &#39;devtools&#39;, # install.packages(devtools)
-    &#39;dplyr&#39;, # devtools::install_github(&#39;hadley/dplyr&#39;) 
+    &#39;dplyr&#39;, # devtools::install_github(&#39;hadley/dplyr&#39;)
     &#39;magrittr&#39;, # devtools::install_github(&#39;smbache/magrittr&#39;)
     &#39;rvest&#39;, # devtools::install_github(&#39;hadley/rvest&#39;)
     &#39;data.table&#39;, # install.packages(data.table)
@@ -128,30 +164,55 @@ The next thing you need to do is to make sure you have necessary packages instal
   )
 
 lapply(packages, library, character.only = T)</code></pre>
-<div class="ui inverted basic yellow segment">
+<div class="ui center aligned inverted basic yellow segment">
 <h2 class="ui header">
 Time to Go Data Treasure Hunting
 </h2>
 </div>
 <p><img class = "ui centered large image" src="http://i.usatoday.net/sports/_photos/2012/07/28/Post-race-bling-almost-costs-Lochte-medal-E21UVME9-x-large.jpg" title = "Hunting for Gold"></p>
-<div class="ui basic segment">
+<div class="ui center aligned basic segment">
 <p>
-In order to mine NBA draft data gold we need to know a few things before building our data mining rig the most important of which being what years the draft has existed.
+In order to mine for NBA draft data gold we need to know a few things, the most important of which being what years has the draft has existed?
 </p>
 <p>
-To do this we navigate here <code><a href = 'http://www.basketball-reference.com/draft/' target="_blank">http://www.basketball-reference.com/draft/</a></code>. It looks like the draft has existed since <strong>1947</strong> if you include the NBA’s precursor the <a href = 'https://en.wikipedia.org/wiki/Basketball_Association_of_America' target="_blank">BAA</a> and <strong>1950</strong> if you don’t.
+To answer this question we navigate our browsers here <code><a href = 'http://www.basketball-reference.com/draft/' target="_blank">http://www.basketball-reference.com/draft/</a></code>. It looks like the draft has existed since <strong>1947</strong> if you include the NBA’s precursor league the <a href = 'https://en.wikipedia.org/wiki/Basketball_Association_of_America' target="_blank">BAA</a> and <strong>1950</strong> if you don’t.
 </p>
 <p>
-We are nearly ready to start building we just need to pick a draft year to test. Given that it was the year this author was born let’s go with <strong>1983</strong>. Let’s navigate over the <code><a href = 'http://www.basketball-reference.com/draft/NBA_1983.html'  target="_blank">1983 Draft</a></code> page. We need one more key input before we can get started and that is the <a href = 'https://en.wikipedia.org/wiki/CSS' target = '_blank' >CSS</a> id of the data we want from the page, in this case the draft table.
+We are almost ready to start mining we just need to pick a draft year to test. Given that it was the year this distinguished author’s birth, let’s go with <strong>1983</strong>. From the main draft index page click on the <code><a href = 'http://www.basketball-reference.com/draft/NBA_1983.html'  target="_blank">1983 Draft</a></code> link.
 </p>
 <p>
-Remember that SelectorGadget I mentioned earlier? It’s time to use it to get the information we need. Click the widget’s button. Next scroll over the table with the draft information. You should see something like the picture below
+Look at all that beautiful data just waiting for us to suck in, I am giddy.
 </p>
-<img class = "ui centered huge image" src="http://i.imgur.com/rdA0pMn.png" title = "css information"> <br>
+<div class="ui hidden divider"></div>
+<img class = "ui centered large image" src="http://media.giphy.com/media/jDpKEDa83adRm/giphy.gif" title = "Bosh Yea">
+<div class="ui hidden divider"></div>
 <p>
-Like the <a href = 'www.youtube.com/watch?v=Z5-rdr0qhWk' target = '_blank' >1978 Cars song</a> our trusty SelectorGadget gave us <i>Just What We Needed</i> now it’s time to build!
+However, before we get ahead of ourselves thinking we’ve unlocked the magic formula to bringing data we long to explore into R we must find one more key input. This important missing piece is the <a href = 'https://en.wikipedia.org/wiki/CSS' target = '_blank' >CSS</a> identifier of the data we want from the page, in this case the draft table. Think of this piece of information as unique identifier for the the html data on the page we want.
+</p>
+<p>
+Remember that SelectorGadget I mentioned earlier? It’s time to use it to extract the CSS identifier we need.
+<div class="ui bulleted divided list">
+ <div class="item">
+Click the widget’s button.
+</div>
+<div class="item">
+Scroll over the table with the draft information
+</div>
+<div class="item">
+Click once an orange box surrounds the table
+</div>
+<div class="item">
+You should see something like the picture below
+</div>
+<div class="ui clearing divider"></div>
+<img class = "ui centered huge image" src="http://i.imgur.com/rdA0pMn.png" title = "css information">
+</div>
+</p>
+<p>
+Just like the <a href = 'www.youtube.com/watch?v=Z5-rdr0qhWk' target = '_blank' >1978 Cars song</a> said, we’ve got <i>Just What We Needed</i> it’s time to go data mining.
 </p>
 </div>
+<center>
 <div class="ui inverted circular segment">
 <h2 class="ui inverted header">
 Step 1
@@ -159,53 +220,78 @@ Step 1
 </div>
 <div class="ui inverted red circular segment">
 <h2 class="ui inverted header">
-Make Our Code Smart
+Enlighten Our Code
 </h2>
 </div>
 <div class="ui inverted green circular segment">
 <h2 class="ui inverted header">
-Extract the Data
+Extract
 </h2>
 </div>
 <div class="ui inverted blue circular segment">
 <h2 class="ui inverted header">
-Clean the Data
+Clean
 </h2>
 </div>
-<div class="ui basic segment">
+</center>
+<div class="ui center aligned basic segment">
+<div class="ui clearing divider"></div><div class="ui hidden divider"></div>
 <p>
-First thing we need to do use code to take the data from the website and help us bring it into a <code><a href = 'http://www.r-tutor.com/r-introduction/data-frame' target = '_blank'>data frame</a></code>. We are going to use the excellent <code><a>rvest</a></code> package to begin the data extraction process. Essentially our code is going to take a URL, capture the page, find the draft table and bring the data into R for data cleaning. Before we do that I want to make our self adjusting and aware of the constraints of the data we are looking for.
-</p>
-<p>
-R, like any programming language is really smart so we want to take advantage of this to help us scale this function and allow it to auto update over time. To do that we will teach our function to allow us to only search for draft years that exist and know if we are looking at a BAA or NBA draft year. If we pick an illegible draft year R will tell us and stop what it’s doing.
-</p>
-<p>
-Also one important aside, you are going to see me use alot of the symbol <code>%&gt;%</code> , it is a chaining tool, think of it like the term <strong>then</strong>. I’m a huge fan of chaining it makes things flow much smoother from start to finish.
-</p>
-<p>
-Also try to following along with my comments by looking for <code>#</code>
+During this next portion of the tutorial we are going to write code that will port the NBA draft data into a <code><a href = 'http://www.r-tutor.com/r-introduction/data-frame' target = '_blank'>data frame</a></code>. We are going to use the excellent <code><a>rvest</a></code> package accomplish much of this. Essentially our code is going to:
+<div class="ui bulleted divided list">
+ <div class="item">
+Create the URL where the data lives
+</div>
+ <div class="item">
+Use the URL to navigate to the page
+</div>
+ <div class="item">
+Capture the page in R
+</div>
+<div class="item">
+Identify draft table
+</div>
+<div class="item">
+Put the table into a data frame.
+</div>
+<div class="item">
+Clean the messy imported data
+</div>
 </p>
 </div>
-<pre class="r"><code>draft_year &lt;- #my pick
+<p>
+However, before we complete those steps I want to <strong>enlighten</strong> our code. By that I mean I want to teach our code to be aware of the context of the data we are collecting. This will make our code self adjusting so we don’t have to update our code over and over again as new drafts occur {assuming the HTML structure of the page where the data lives doesn’t change, a far from fail proof assumption}.
+</p>
+<p>
+Specifically, we are going to teach our code to allow us to only search for draft years that are completed. We are also going to teach our code how to differentiate between a BAA and NBA draft while simultaneously telling us which one we picked. We also want our code to tell us if we are searching for an ineligible draft year and stop what it is doing if we happen to make this mistake.
+</p>
+<p>
+One major aside, you are going to see me use alot of the symbol <code>%&gt;%</code>, it is a called a <strong>pipe chaining operator</strong>, think of it like the term <strong>then</strong>. I’m a huge fan of chaining, it makes code flow more smoothly and cuts down on the amount of code you need to write. If you are on a Mac you can have R write a pipe easily by pressing <code>command+shift+M</code>, Windows users I believe there is similar syntax as well but I don't know it off the top of my head.
+</p>
+<p>
+Finally, if you are here to try to learn some R, I urge you to try to follow along with my comments by looking for <code>#</code> and in case you are wondering <code><-</code>is how you assign thing in R and <code>%&lt;&gt;%</code> is a beautiful combination of <code>%&gt;%</code> and<code><-</code> much simultaneously takes something, transforms it and assigns it.
+</p>
+</div>
+<pre class="r"><code>draft_year &lt;- # our chosen draft year
   1983
 
-year.first_draft &lt;- #remember from earlier
+year.first_draft &lt;- # remember from earlier 1st BAA draft
   1947
-  
-current_month &lt;- #we&#39;re gonna to teach the code to know if the draft has
+
+current_month &lt;- # we&#39;re gonna to teach the code to know if the draft has
   Sys.Date() %&gt;%
   month %&gt;%
   as.numeric
-  
+
 if (current_month &gt; 6) {
-  year.most_recent_draft &lt;- #the draft is the end of June so if its July we&#39;ve passed the draft!
-    Sys.Date() %&gt;% #tells us what today is
-    year %&gt;% #extacts the year
+  year.most_recent_draft &lt;- # the draft is at the end of June so if its July we&#39;ve passed the draft!
+    Sys.Date() %&gt;% # tells us what today is
+    year %&gt;% # extracts the year
     as.numeric()
 } else {
   year.most_recent_draft &lt;-
-    Sys.Date() %&gt;% 
-    year %&gt;% 
+    Sys.Date() %&gt;%
+    year %&gt;%
     as.numeric() - 1 #if it&#39;s earlier than July we take last year&#39;s draft
 }
 
@@ -217,160 +303,172 @@ if (!draft_year %in% year.first_draft:year.most_recent_draft) {
 }
 
 if (draft_year &lt; 1950) {
-  base &lt;- #remember what we learned earlier?
+  base &lt;- # remember what we learned earlier?
     &#39;http://www.basketball-reference.com/draft/BAA_&#39;
-  
+
   id.league &lt;-
-    &#39;BAA&#39;
+    &#39;BAA&#39; # based on the date R will know hte league
 } else {
-  base &lt;- #well if it&#39;s not the BAA it&#39;s the NBA, DUHHH
+  base &lt;- # well if it&#39;s not the BAA it&#39;s the NBA, DUHHH
     &#39;http://www.basketball-reference.com/draft/NBA_&#39;
-  
+
   id.league &lt;-
     &#39;NBA&#39;
 }
 
 url.draft_year &lt;-
   base %&gt;%
-  paste0(draft_year, &#39;.html&#39;)
+  paste0(draft_year, &#39;.html&#39;) # creates the url where the data lives
 
-url.draft_year #our url with the data and it should work for any draft year!</code></pre>
+url.draft_year # our url with the data and it should work for any draft year!</code></pre>
 <pre><code>## [1] &quot;http://www.basketball-reference.com/draft/NBA_1983.html&quot;</code></pre>
-<div class="ui basic segment">
+<div class="ui center aligned basic segment">
 <p>
-Fantastic we got the all important URL where our data lives. Now onto the data extraction
-</p>
-<p>
-I am going to do some advanced data cleaning processes and I am also going to use R’s magic to place the correct round into the data frame, something that is not done on Basketball-Reference.
-</p>
+Fantastic, this code based upon our selected draft year creates the URL where the draft data lives. Now that we have this we can move on to the fun part <br>
+<div class="ui green inverted center aligned segment">
+Data Extraction
 </div>
-<pre class="r"><code>page &lt;- #get the html from the page into R
+</p>
+<p>
+I am going to write some fairly advanced data cleaning code that will use R’s magic to infer player’s corresponding draft round so we can add it as a variable in our data frame, unfortunately Basketball-Reference doesn’t provide that information to us in an easily usable way.
+</p>
+<p>
+<img class = "ui centered large image" src="https://usatftw.files.wordpress.com/2014/07/c01_covmain_17_25159729.jpg?w=1000&h=661" title = "Bron"></p>
+</div>
+<pre class="r"><code>page &lt;- # Get the html from the page into R
   url.draft_year %&gt;%
   read_html
 
 raw_data &lt;-
   page %&gt;%
-  html_nodes(&#39;#stats&#39;) %&gt;% #remember this is the #node from earlier where the table lies
-  html_table(header = F, fill = F) %&gt;% #this function reads the table 
-  data.frame %&gt;% #its not a data.frame I need to turn it into one
-  tbl_df #I am going to convert it into a special type of data.frame using tbl_df
+  html_nodes(&#39;#stats&#39;) %&gt;% # Remember this is the css id from earlier
+  html_table(header = F, fill = F) %&gt;% # This function reads the table
+  data.frame %&gt;% # Data is not ts not a data.frame this puts it into tht form
+  tbl_df # This converts it into a super dope special type of data fram tbl_df
 
-headers &lt;- #Get the parent header rows so we can append them into the column names
-  raw_data %&gt;% 
-  slice(1) %&gt;% #if you look at the data they are in the 1st row
-  unlist %&gt;% #returns a list we dont want that
-  as.character %&gt;% #be safe and turn them into character vectors
-  tolower %&gt;% #lower case is my preference
-  str_replace(&#39;\\ &#39;, &#39;_&#39;) #column names SHOULD NOT contain spaces, use the snake!!
+headers &lt;- # Get the parent header rows so we can append them into the column names and sove the duplicate name problem
+  raw_data %&gt;%
+  slice(1) %&gt;% # Takes the 1st row where this header info
+  unlist %&gt;% # Returns a the row as list we dont want that
+  as.character %&gt;% # We want to explicitly define this vector as a character
+  tolower %&gt;% # Gonna be part of our title, I perfer lower case titles
+  str_replace(&#39;\\ &#39;, &#39;_&#39;) # Column names SHOULD NOT contain spaces, use the snake!!
 
-#Time to get the column items
+# Time to get the actual column items
 
 columns &lt;-
   raw_data %&gt;%
-  slice(2) %&gt;% #it&#39;s in the second row
-  tolower %&gt;% #remember from #earlier
-  str_replace(&#39;%&#39;, &#39;_pct&#39;) %&gt;% # % should also never be a column header
-  str_replace(&#39;/&#39;, &#39;_per_&#39;) # / should ALSO never be a column #header
+  slice(2) %&gt;% # This information lives in the second row
+  tolower %&gt;%
+  str_replace(&#39;%&#39;, &#39;_pct&#39;) %&gt;% # % should also never be a column header this gets rid of them
+  str_replace(&#39;/&#39;, &#39;_per_&#39;) # / should ALSO never be a column header, this removes them
 
-name.df &lt;- #lets create a dataframe to replace make our names
-  data_frame(header = headers, column = columns) %&gt;%
-  mutate(
-    header = ifelse(header == &#39;&#39;, NA, header), #no headers for blank items
-    header = ifelse(header %like% &#39;round|territorial_picks&#39;, NA, header) #also don&#39;t want to see these
+name.df &lt;- # This creates a data frame that will contain column names
+  data_frame(header = headers, column = columns) %&gt;% # data_frame is a special faster data frame from dplyr that I reccomend you use whever possible
+  mutate( # Mutate adds variables to data frames
+    header = ifelse(header == &#39;&#39;, NA, header), # No headers for blank items, they happen to be identifiers about the draft player versus statistics
+    header = ifelse(header %like% &#39;round|territorial_picks&#39;, NA, header) # If we see these words we want to exclude that row
   ) %&gt;%
-  FillDown(&#39;header&#39;) %&gt;% #fills down until the next round
-  mutate(name.column = ifelse(header %&gt;% is.na, column, paste(header, column, sep = &#39;.&#39;)))
+  FillDown(&#39;header&#39;) %&gt;% # Fills down the keys
+  mutate(name.column = ifelse(header %&gt;% is.na, column, paste(header, column, sep = &#39;.&#39;)) # if the field has a header we want to join the items together if not just keep the item as the name, we know which those are by where the NAs live
+         )
 
-names(raw_data) &lt;- #change the names to our new clean names!
+names(raw_data) &lt;- # change the names to our new clean names!
   name.df$name.column
 
-## Magically figure out which round the player was taken in
+## Use R skills to magically figure out which round the player was taken in
 
-round_rows &lt;- #find out the row number where we get indication of the round
-  &#39;Round&#39; %&gt;% #that is the word we need to look for 
-  grep(raw_data$player) # we want to return the row numbers in the 4th column where we find that word
+round_rows &lt;- # find out the row number where we get indication of the round
+  &#39;Round&#39; %&gt;% # that is the word we need to look for
+  grep(raw_data$player) # we want to return the row numbers in the 4th column where we find that word, the round headers live in this column
 
 round_df &lt;- #create data frame where the rounds start
-  data_frame(round = paste0(&#39;Round &#39;, 1:length(round_rows)), #the number of times we see the word indicates how many rounds that year had
-             id.row = round_rows + 2 #the players names start 2 rows below where we find the word
+  data_frame(round = paste0(&#39;Round &#39;, 1:length(round_rows)), # the number of times we see the word indicates how many rounds that year had with some slight exceptions
+             id.row = round_rows + 2 # the players names start 2 rows below where we find the word
              )
-## This is for later but trust me, back in the day they had other ways to get players and we need to prepare ourselves for this when if we choose a year where this is a problem!
 
-if (&#39;Other|Territorial Picks&#39; %&gt;% grep(raw_data$player) %&gt;% length &gt; 0) {
+## This is for later but trust me from exploring, there were other ways players ended up on teams that weren&#39;t considered drafts, there were specific words that Basketball-Reference uses to delinate them and those are the 2 words we looking for
+
+if (&#39;Other|Territorial Picks&#39; %&gt;% grep(raw_data$player) %&gt;% #looking for their existence, if they exist the length of the results won&#39;t be zero
+    length &gt; 0) {
   other_rows &lt;-
     &#39;Other|Territorial Picks&#39; %&gt;% grep(raw_data$player)
-  
+
   other_rounds.df &lt;-
-    data_frame(round = &#39;Other&#39;,
+    data_frame(round = &#39;Other&#39;, #create a special name so we will get an NA for the round when we magically extract the round later
                id.row = other_rows + 2)
   round_df %&lt;&gt;%
     bind_rows(other_rounds.df)
 }
 
 raw_data %&lt;&gt;%
-  mutate(id.row = 1:nrow(.)) %&gt;% #need to create a temporary id to merge the rows in
-  left_join(round_df, by = &#39;id.row&#39;) %&gt;% #this joins the data by the new id
-  select(round, everything()) %&gt;% #cleans up order
-  FillDown(&#39;round&#39;) %&gt;% #fills the round
-  mutate(id.round = round %&gt;% extract_numeric) %&gt;% #want to extract the numeric round if it exists
-  select(id.round, everything()) %&gt;% #cleans up the order again
-  select(-c(id.row, round)) #we dont need these columns
+  mutate(id.row = 1:nrow(.)) %&gt;% # We need to create a temporary id to merge the rows in the draft data frame to this, here we do this
+  left_join(round_df, by = &#39;id.row&#39;) %&gt;% # A left join keeps the first table and merges any matching table from the right table, in this case the right table is the round data, frame
+  select(round, everything()) %&gt;% # cleans up order
+  FillDown(&#39;round&#39;) %&gt;% # Fills the round by the boundries
+  mutate(id.round = round %&gt;% extract_numeric) %&gt;% # We want to extract the numeric round if it exists this does that
+  select(id.round, everything()) %&gt;% # cleans up the order again
+  select(-c(id.row, round)) # we dont need these columns, using - tells R to remove these columns
+
+## Last step, remove the rows we don&#39;t need
 
 raw_data %&lt;&gt;% ## remove the rows we don&#39;t need
-  slice(-1) %&gt;% #first row we never need
-  dplyr::filter(!rk == &#39;Rk&#39;, !player %like% &#39;Round|Other Picks&#39;) #filters out fields that don&#39;t contain data because they contain those 3 words
+  slice(-1) %&gt;% # First row the way we import the data contains the items, remember
+  dplyr::filter(!rk == &#39;Rk&#39;, !player %like% &#39;Round|Other Picks&#39;) # In these tables we know how to find &quot;bad&quot; rows by looking for &quot;Rk&quot; in the rk column and the word Round or Other Picks in the player column filters out fields that don&#39;t contain data because they contain those 3 words
 
 raw_data %&lt;&gt;%
-  select(-rk) %&gt;% #we dont need rk it&#39;s a meaning loss row
-  rename(
-    id.pick = pk, #better name
-    id.bref.team = tm, #better name
-    totals.years_played = yrs #better name
+  select(-rk) %&gt;% # We dont need the rank column its meaningless
+  rename( #A little more name cleaning
+    id.pick = pk, # better name, helps us remember that the pick is an id which it is
+    id.bref.team = tm, # this column corresponds with the basketball reference
+    totals.years_played = yrs # Better name, shows us how many years someone played
   ) %&gt;%
-  mutate(id.pick = id.pick %&gt;% as.numeric) %&gt;% #turn this field into a numeric one
   arrange(id.pick) #orders by pick!
 
-numeric_columns &lt;- #tell R which fields are numeric
+numeric_columns &lt;- # Tell R which fields are numeric and then convert them to numeric fields!
   raw_data %&gt;%
-  select(-c(id.bref.team, college, player)) %&gt;% #these will be our non numeric fields
-  names #takes the name
+  select(-c(id.bref.team, college, player)) %&gt;% # Selects the non numeric fields
+  names # Returns the names of the columns that we want to convert
 
 raw_data %&lt;&gt;%
-  mutate_each_(funs(as.numeric), 
-               vars = numeric_columns #takes our selected fields and converts them to #s
+  mutate_each_(funs(as.numeric),  # this is where we tell R what function we want to use on our selected columns, here its as.numeric
+               vars = numeric_columns # These are the columns from earlier
   )
-raw_data %&gt;% 
-  glimpse #explore the data!</code></pre>
+
+raw_data %&gt;%
+  glimpse # This function gives us a snapshot of our data frame!</code></pre>
 <pre><code>## Observations: 226
 ## Variables: 22
-## $ id.round            (dbl) 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, ...
-## $ id.pick             (dbl) 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13,...
-## $ id.bref.team        (chr) &quot;HOU&quot;, &quot;IND&quot;, &quot;HOU&quot;, &quot;SDC&quot;, &quot;CHI&quot;, &quot;GSW&quot;, ...
-## $ player              (chr) &quot;Ralph Sampson&quot;, &quot;Steve Stipanovich&quot;, &quot;Rod...
-## $ college             (chr) &quot;University of Virginia&quot;, &quot;University of M...
-## $ totals.years_played (dbl) 9, 5, 10, 14, 10, 1, 12, 16, 17, 13, 16, 1...
-## $ totals.g            (dbl) 456, 403, 768, 1073, 679, 45, 928, 987, 12...
-## $ totals.mp           (dbl) 13591, 12591, 24876, 30152, 13247, 354, 24...
-## $ totals.pts          (dbl) 7039, 5323, 9014, 15097, 5080, 166, 11834,...
-## $ totals.trb          (dbl) 4011, 3131, 5087, 2987, 4128, 82, 4718, 33...
-## $ totals.ast          (dbl) 1038, 938, 2750, 2729, 635, 22, 1298, 1086...
-## $ shooting.fg_pct     (dbl) 0.486, 0.484, 0.503, 0.482, 0.454, 0.571, ...
-## $ shooting.3p_pct     (dbl) 0.172, 0.179, 0.260, 0.370, 0.037, NA, 0.1...
-## $ shooting.ft_pct     (dbl) 0.661, 0.796, 0.761, 0.833, 0.738, 0.418, ...
-## $ per_game.mp         (dbl) 29.8, 31.2, 32.4, 28.1, 19.5, 7.9, 26.8, 2...
-## $ per_game.pts        (dbl) 15.4, 13.2, 11.7, 14.1, 7.5, 3.7, 12.8, 9....
-## $ per_game.trb        (dbl) 8.8, 7.8, 6.6, 2.8, 6.1, 1.8, 5.1, 3.4, 3....
-## $ per_game.ast        (dbl) 2.3, 2.3, 3.6, 2.5, 0.9, 0.5, 1.4, 1.1, 1....
-## $ advanced.ws         (dbl) 20.1, 30.4, 56.0, 75.2, 17.4, 0.8, 45.0, 4...
-## $ advanced.ws_per_48  (dbl) 0.071, 0.116, 0.108, 0.120, 0.063, 0.106, ...
-## $ advanced.bpm        (dbl) 0.0, 1.1, 1.6, 0.4, -2.7, -1.8, -1.3, -0.6...
-## $ advanced.vorp       (dbl) 6.8, 9.9, 23.0, 18.6, -2.5, 0.0, 4.2, 7.0,...</code></pre>
-<div class="ui basic segment">
+## $ id.round            (dbl) 1, 1, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 1, 5, ...
+## $ id.pick             (dbl) 1, 10, 100, 101, 102, 103, 104, 105, 106, ...
+## $ id.bref.team        (chr) &quot;HOU&quot;, &quot;WSB&quot;, &quot;UTA&quot;, &quot;DET&quot;, &quot;DAL&quot;, &quot;WSB&quot;, ...
+## $ player              (chr) &quot;Ralph Sampson&quot;, &quot;Jeff Malone&quot;, &quot;Matt Clar...
+## $ college             (chr) &quot;University of Virginia&quot;, &quot;Mississippi Sta...
+## $ totals.years_played (dbl) 9, 13, NA, 1, 1, NA, NA, NA, NA, NA, NA, N...
+## $ totals.g            (dbl) 456, 905, NA, 7, 1, NA, NA, NA, NA, NA, NA...
+## $ totals.mp           (dbl) 13591, 29660, NA, 28, 16, NA, NA, NA, NA, ...
+## $ totals.pts          (dbl) 7039, 17231, NA, 12, 3, NA, NA, NA, NA, NA...
+## $ totals.trb          (dbl) 4011, 2364, NA, 3, 5, NA, NA, NA, NA, NA, ...
+## $ totals.ast          (dbl) 1038, 2154, NA, 1, 0, NA, NA, NA, NA, NA, ...
+## $ shooting.fg_pct     (dbl) 0.486, 0.484, NA, 0.462, 0.333, NA, NA, NA...
+## $ shooting.3p_pct     (dbl) 0.172, 0.268, NA, NA, NA, NA, NA, NA, NA, ...
+## $ shooting.ft_pct     (dbl) 0.661, 0.871, NA, NA, 0.500, NA, NA, NA, N...
+## $ per_game.mp         (dbl) 29.8, 32.8, NA, 4.0, 16.0, NA, NA, NA, NA,...
+## $ per_game.pts        (dbl) 15.4, 19.0, NA, 1.7, 3.0, NA, NA, NA, NA, ...
+## $ per_game.trb        (dbl) 8.8, 2.6, NA, 0.4, 5.0, NA, NA, NA, NA, NA...
+## $ per_game.ast        (dbl) 2.3, 2.4, NA, 0.1, 0.0, NA, NA, NA, NA, NA...
+## $ advanced.ws         (dbl) 20.1, 54.2, NA, 0.0, 0.0, NA, NA, NA, NA, ...
+## $ advanced.ws_per_48  (dbl) 0.071, 0.088, NA, -0.046, -0.003, NA, NA, ...
+## $ advanced.bpm        (dbl) 0.0, -2.1, NA, -6.9, -12.1, NA, NA, NA, NA...
+## $ advanced.vorp       (dbl) 6.8, -0.9, NA, 0.0, 0.0, NA, NA, NA, NA, N...</code></pre>
+<div class="ui center aligned basic segment">
 <p>
 Booyah, just like that we have the data from the table for the 1983 draft.
 </p>
-<p><img class = "ui centered large image" src="https://s-media-cache-ak0.pinimg.com/originals/fa/0b/cf/fa0bcf6038813071226f70396fb8115a.gif" title = "Booyah"></p>
+<div class="ui huge black message">
+Data Mined.
 </div>
+<p><img class = "ui centered large image" src="https://s-media-cache-ak0.pinimg.com/originals/fa/0b/cf/fa0bcf6038813071226f70396fb8115a.gif" title = "Booyah"></p>
 <div class="ui inverted circular segment">
 <h2 class="ui inverted header">
 Step 2
@@ -378,67 +476,75 @@ Step 2
 </div>
 <div class="ui inverted red circular segment">
 <h2 class="ui inverted header">
-Import Missing Page Data
+Import Page’s Other Valuable Data
 </h2>
 </div>
 <div class="ui inverted green circular segment">
 <h2 class="ui inverted header">
-Resolve Data
+Resolve
 </h2>
 </div>
 <div class="ui inverted blue circular segment">
 <h2 class="ui inverted header">
-Add Fun Message
+Messagify
 </h2>
 </div>
-<div class="ui basic segment">
+<div class="ui clearing divider"></div>
 <p>
-Believe it or not we are almost done. All that is left to do is import the other important data from the page we captured that being the player’s BREF ID, if it exists, and the players BREF profile URL. I have also done the less than fun grunt working of creating a separate file that contains all the BREF team IDs, the team’s name, it’s current team ID and team name.
+Believe it or not we are almost done and the hardest parts are behind us. All that is left to do is import the other valuable data from the draft page that being the player’s BREF ID, if it exists, which in turn gives us the player’s BREF profile URL. In addition to that, we want to resolve the BREF team IDs to the actual draft team.
 </p>
 <p>
-After collecting and importing that data we will merge it do the raw data and we will be done. I also like to add fun messages to my code, especially when functions are built around it, that’s coming next folks. Messages show you that your code is done running and can be tailored to, make you laugh, feel good about your work, or as in this case, learn a new fact.
+The player IDs can be found the same way we brought in the table data, with their CSS identifiers. In this case they are an <code>attribute</code> of the 4th table data column.
+</p>
+<p>
+As for the resolving the team IDs that is more complicated process which I’ve taken the liberty of already doing separately. We are going to just read in that file which contains all the BREF team IDs, the team names, current team ids, and whether the franchise is still in existence.  After collecting and importing that information we will merge it the existing data frame and we will be finished!
+</p>
+<p>
+The final step is a personal preference, though completely unnecessary to the process of learning to be an R coding master. I like to <strong>Messagify</strong> my code, especially when functions are built around the code, and that’s coming next folks. Messages show you that your code is done running and can be tailored to, make you laugh, feel good about your work, or as the case here, learn a potentially random new fact. When we build our functions I will show you how to make Messagifying optional
 </p>
 </div>
 <pre class="r"><code>player &lt;-
   page %&gt;%
-  html_nodes(&#39;td:nth-child(4) a&#39;) %&gt;% #get the player names to resolve against our data table
-  html_text
+  html_nodes(&#39;td:nth-child(4) a&#39;) %&gt;% # This is the column where the player IDs live
+  html_text %&gt;% # this takes the html output and returns text
+  str_trim # To be safe this trims the code in case there are any unceassary white spaces
 
-url.bref.player &lt;-
+url.bref.player &lt;- # This creates the player URL
   page %&gt;%
   html_nodes(&#39;td:nth-child(4) a&#39;) %&gt;%
-  html_attr(&#39;href&#39;) %&gt;% # pull in the player&#39;s page stem if they exist
-  paste0(&#39;http://www.basketball-reference.com&#39;, .) #add in the base url
+  html_attr(&#39;href&#39;) %&gt;% # This function pulls in the html attribute, in this case the stem
+  paste0(&#39;http://www.basketball-reference.com&#39;, .) # We need to append the base URL!
 
-stem.player &lt;-
+stem.player &lt;- # Here we are going to extract out from the steam the exact player ID
   page %&gt;%
   html_nodes(&#39;td:nth-child(4) a&#39;) %&gt;%
   html_attr(&#39;href&#39;) %&gt;%
-  str_replace_all(&#39;/players/|.html&#39;, &#39;&#39;) #parse the stem to help us extract the player ID
+  str_replace_all(&#39;/players/|.html&#39;, &#39;&#39;) # eliminates the unnecassary words to help us get at the clean ID
 
-players_urls &lt;-
+players_urls &lt;- # This will create a data frame with the information we want
   data_frame(player, url.bref.player, stem.player) %&gt;%
-  separate(stem.player, c(&#39;letter.first&#39;, &#39;id.bref.player&#39;), #separate out the letter to get the raw stem
+  separate(stem.player, c(&#39;letter.first&#39;, &#39;id.bref.player&#39;), #  Separates the remaining 2 parts by its delimiter the / we only want the second column which contains the id
            sep = &#39;/&#39;) %&gt;%
-  select(-letter.first) #remove the first letter
+  select(-letter.first) # removes the unneeded column
 
-## resolve with teams
+## Resolve the team ids
 
 teams_ids &lt;-
-    &#39;http://asbcllc.com/data/nba/bref/nba_teams_ids.csv&#39; %&gt;% #import my team id data
-    read_csv
+    &#39;http://asbcllc.com/data/nba/bref/nba_teams_ids.csv&#39; %&gt;%
+    read_csv # imports my team data
 
-data &lt;-
+data &lt;- #create a new data frame which will be our final data frame with all the information
   raw_data %&gt;%
-  left_join(players_urls, by = &#39;player&#39;) %&gt;% #join the raw data with the urls and stems
-  mutate(id.league, #add in the league id
-         year.draft = draft_year, #add in the draft year
-         url.bref.draft = url.draft_year)
+  left_join(players_urls, by = &#39;player&#39;) %&gt;% # joins are existing data with the players who have BREF profiles
+  mutate(id.league, # add in the league id from earlier
+         year.draft = draft_year, # add in the draft year from earlier, I like to use periods to separate columns, total personal preference
+         url.bref.draft = url.draft_year # this tells us the URL where we got our data from
+         )
 
 data %&lt;&gt;%
-  left_join(teams_ids, by = &#39;id.bref.team&#39;) %&gt;% #join against the team names
+  left_join(teams_ids, by = &#39;id.bref.team&#39;) %&gt;% # Joins our data frame with the team data which will merge in the missing team data
   select( #reorder the data
-    id.league, 
+    id.league,
     year.draft,
     id.round,
     id.pick:player,
@@ -451,19 +557,19 @@ data %&lt;&gt;%
   ) %&gt;%
   arrange(id.pick)
 
-### Let&#39;s craft our message that tells us a random fact a player wh
+### Time to Messagify!!
 
 players &lt;-
-  data %&gt;% 
+  data %&gt;%
   nrow #counts the number of players in that draft
 
-random_player &lt;-
+random_player &lt;- # I want our message to return information about a random player from that draft
   data %&gt;%
-  mutate(rank.total_points = 1:nrow(.)) %&gt;% #adds a ranking field
+  arrange(desc(totals.pts)) %&gt;% # arranges the data with the top scorers first
+  mutate(rank.total_points = 1:nrow(.)) %&gt;% # adds a ranking field
   dplyr::filter(totals.pts &gt; 0 &amp; totals.years_played &gt; 1) %&gt;% #filters for players who played over 1 season and scored points
-  arrange(desc(totals.pts)) %&gt;% #sorts the data descending by 
-  dplyr::filter(!is.na(id.bref.player)) %&gt;% #filters for players 
-  sample_n(1) #takes a random sample of the players that meet the criteria
+  dplyr::filter(!is.na(id.bref.player)) %&gt;% # filters out players who don&#39;t have a BREF profile page
+  sample_n(1) # returns 1 random row with a player that fits the criteria!
 
 # Print the message
 &quot;Congratulations you pulled in data for all &quot; %&gt;%
@@ -483,18 +589,21 @@ random_player &lt;-
   ) %&gt;%
   message</code></pre>
 <pre><code>## Congratulations you pulled in data for all 226 players from the 1983 Draft
-## Have you heard of the #2 pick, Steve Stipanovich?
-## He played 5 seasons &amp; ranked #2 in his draft class for total points scored!</code></pre>
-<div class="ui basic segment">
+## Have you heard of the #33 pick, Dirk Minniefield?
+## He played 3 seasons &amp; ranked #33 in his draft class for total points scored!</code></pre>
+<div class="ui center aligned basic segment">
 <p>
-Let’s take a quick look at a snapshot of the data
+The moment of truth is here, we’ve completed the steps needed to bring the cleaned and resolved draft data into R, now we have to make sure it worked!
+</p>
+<p>
+To do that we are going to select the a few columns, arrange by top career total point scorers, and look at the top 5 names.
 </p>
 </div>
-<pre class="r"><code>data %&gt;% 
+<pre class="r"><code>data %&gt;%
   select(id.round, id.pick, player, team, totals.years_played, totals.pts) %&gt;%
-  mutate(totals.pts = totals.pts %&gt;% comma(digits = 0)) %&gt;% #some formating
-  head %&gt;% 
-  format_table(align = &#39;c&#39;)</code></pre>
+  mutate(totals.pts = totals.pts %&gt;% comma(digits = 0)) %&gt;% # formats to add a comma
+  head %&gt;% # Takes the top 5 players
+  format_table(align = &#39;c&#39;) # This creates the beautiful SVG table you are looking at</code></pre>
 <table>
 <thead>
 <tr class="header">
@@ -557,33 +666,33 @@ Let’s take a quick look at a snapshot of the data
 </tr>
 </tbody>
 </table>
-<div class="ui basic segment">
+<div class="ui center aligned basic segment">
 <p><img class = "ui centered medium image" src='http://i.imgur.com/Cp62j1q.gif'></p>
-</div>
 <div class="ui basic ui inverted blue segment">
 <h2 class="ui header">
 Let’s Get Function-al
 </h2>
 </div>
-<div class="ui basic segment">
-<p class="ui center aligned">
-Now that we know our code works let’s build a function that takes a draft year and returns a data frame with the cleaned and resolve data. We want to the function to inherit the smarts we looked at earlier and we will add an option as to whether our special message will be returned upon execution of the function.
+<p>
+Now that we know our code is <strong><i>fleek</i></strong> and works like Draymond Green in the paint, it’s time to take our code and turn it into a function we can use whenever we feel like it. As I mentioned earlier, I am going to add in a few lines of code that will make returning a message optional. I am going to rewrite the code from earlier in a consolidated manner so you can just skip to the bottom if you want.
 </p>
 </div>
 <pre class="r"><code>get_nba_year_draft_data &lt;-
-  function(draft_year = 1984,
-           return_message = T) {
-    options(warn = -1)
+  function(draft_year = 1983, # this is the default year if you run the function with no year sepcified
+           return_message = T # this specifies the default behavior is to return our message
+           ) {
+    options(warn = -1) # Turns off some annoying warnings
+
     #Make Smart Draft Years
-    
+
     year.first_draft &lt;-
       1947
-    
+
     current_month &lt;-
       Sys.Date() %&gt;%
       month %&gt;%
       as.numeric
-    
+
     if (current_month &gt; 6) {
       year.most_recent_draft &lt;-
         Sys.Date() %&gt;%
@@ -595,163 +704,165 @@ Now that we know our code works let’s build a function that takes a draft year
         year %&gt;%
         as.numeric() - 1
     }
-    
+
     if (!draft_year %in% year.first_draft:year.most_recent_draft) {
       stop.message &lt;-
         &quot;Not a valid draft year boss!!  Drafts can only be between &quot; %&gt;%
         paste0(year.first_draft, &#39; and &#39;, year.most_recent_draft)
       stop(stop.message)
     }
-    
+
     if (draft_year &lt; 1950) {
       base &lt;-
         &#39;http://www.basketball-reference.com/draft/BAA_&#39;
-      
+
       id.league &lt;-
         &#39;BAA&#39;
     } else {
       base &lt;-
         &#39;http://www.basketball-reference.com/draft/NBA_&#39;
-      
+
       id.league &lt;-
         &#39;NBA&#39;
     }
-    
+
     url.draft_year &lt;-
       base %&gt;%
       paste0(draft_year, &#39;.html&#39;)
-    
-    page &lt;- 
+
+    page &lt;-
       url.draft_year %&gt;%
       read_html
-    
+
     raw_data &lt;-
       page %&gt;%
-      html_nodes(&#39;#stats&#39;) %&gt;% 
+      html_nodes(&#39;#stats&#39;) %&gt;%
       html_table(header = F, fill = F) %&gt;%
-      data.frame %&gt;% 
+      data.frame %&gt;%
       tbl_df
-    
-    headers &lt;- 
-      raw_data %&gt;% 
-      slice(1) %&gt;% 
-      unlist %&gt;% 
+
+    headers &lt;-
+      raw_data %&gt;%
+      slice(1) %&gt;%
+      unlist %&gt;%
       as.character %&gt;%
       tolower %&gt;%
-      str_replace(&#39;\\ &#39;, &#39;_&#39;) 
-    
+      str_replace(&#39;\\ &#39;, &#39;_&#39;)
+
     #Time to get the column items
-    
+
     columns &lt;-
       raw_data %&gt;%
       slice(2) %&gt;%
-      tolower %&gt;% 
+      tolower %&gt;%
       str_replace(&#39;%&#39;, &#39;_pct&#39;) %&gt;%
-      str_replace(&#39;/&#39;, &#39;_per_&#39;) 
-    
+      str_replace(&#39;/&#39;, &#39;_per_&#39;)
+
     name.df &lt;-
       data_frame(header = headers, column = columns) %&gt;%
       mutate(
-        header = ifelse(header == &#39;&#39;, NA, header), 
+        header = ifelse(header == &#39;&#39;, NA, header),
         header = ifelse(header %like% &#39;round|territorial_picks&#39;, NA, header)
       ) %&gt;%
-      FillDown(&#39;header&#39;) %&gt;% 
-      mutate(name.column = ifelse(header %&gt;% is.na, column, paste(header, column, sep = &#39;.&#39;)))
-    
+      FillDown(&#39;header&#39;) %&gt;%
+      mutate(name.column = ifelse(header %&gt;% is.na, column,
+                                  paste(header, column, sep = &#39;.&#39;))
+             )
+
     names(raw_data) &lt;-
       name.df$name.column
-    
+
     ## Magically figure out which round the player was taken in
-    
+
     round_rows &lt;-
-      &#39;Round&#39; %&gt;% 
+      &#39;Round&#39; %&gt;%
       grep(raw_data$player)
-    
+
     round_df &lt;-
       data_frame(round = paste0(&#39;Round &#39;, 1:length(round_rows)),
                  id.row = round_rows + 2
       )
-    
+
     if (&#39;Other|Territorial Picks&#39; %&gt;% grep(raw_data$player) %&gt;% length &gt; 0) {
       other_rows &lt;-
         &#39;Other|Territorial Picks&#39; %&gt;% grep(raw_data$player)
-      
+
       other_rounds.df &lt;-
         data_frame(round = &#39;Other&#39;,
                    id.row = other_rows + 2)
       round_df %&lt;&gt;%
         bind_rows(other_rounds.df)
     }
-    
+
     raw_data %&lt;&gt;%
-      mutate(id.row = 1:nrow(.)) %&gt;% 
+      mutate(id.row = 1:nrow(.)) %&gt;%
       left_join(round_df, by = &#39;id.row&#39;) %&gt;%
       select(round, everything()) %&gt;%
       FillDown(&#39;round&#39;) %&gt;%
-      mutate(id.round = round %&gt;% extract_numeric) %&gt;% 
+      mutate(id.round = round %&gt;% extract_numeric) %&gt;%
       select(id.round, everything()) %&gt;%
-      select(-c(id.row, round)) 
-    
+      select(-c(id.row, round))
+
     raw_data %&lt;&gt;%
       slice(-1) %&gt;%
       dplyr::filter(!rk == &#39;Rk&#39;, !player %like% &#39;Round|Other Picks&#39;)
-    
+
     raw_data %&lt;&gt;%
-      select(-rk) %&gt;% 
+      select(-rk) %&gt;%
       rename(
-        id.pick = pk, 
-        id.bref.team = tm, 
-        totals.years_played = yrs #better name
+        id.pick = pk,
+        id.bref.team = tm,
+        totals.years_played = yrs
       ) %&gt;%
       mutate(id.pick = id.pick %&gt;% as.numeric) %&gt;%
       arrange(id.pick)
-    
+
     numeric_columns &lt;-
       raw_data %&gt;%
       select(-c(id.bref.team, college, player)) %&gt;%
       names
-    
+
     raw_data %&lt;&gt;%
-      mutate_each_(funs(as.numeric), 
+      mutate_each_(funs(as.numeric),
                    vars = numeric_columns
       )
-    
+
     ## Player ID Extraction
     player &lt;-
       page %&gt;%
       html_nodes(&#39;td:nth-child(4) a&#39;) %&gt;%
       html_text
-    
+
     url.bref.player &lt;-
       page %&gt;%
       html_nodes(&#39;td:nth-child(4) a&#39;) %&gt;%
       html_attr(&#39;href&#39;) %&gt;%
       paste0(&#39;http://www.basketball-reference.com&#39;, .)
-    
+
     stem.player &lt;-
       page %&gt;%
       html_nodes(&#39;td:nth-child(4) a&#39;) %&gt;%
       html_attr(&#39;href&#39;) %&gt;%
       str_replace_all(&#39;/players/|.html&#39;, &#39;&#39;)
-    
+
     players_urls &lt;-
       data_frame(player, url.bref.player, stem.player) %&gt;%
       separate(stem.player, c(&#39;letter.first&#39;, &#39;id.bref.player&#39;),
                sep = &#39;/&#39;) %&gt;%
       select(-letter.first)
-    
+
     ## resolve with team
     teams_ids &lt;-
       &#39;http://asbcllc.com/data/nba/bref/nba_teams_ids.csv&#39; %&gt;%
       read_csv
-    
+
     data &lt;-
       raw_data %&gt;%
       left_join(players_urls, by = &#39;player&#39;) %&gt;%
       mutate(id.league,
              year.draft = draft_year,
              url.bref.draft = url.draft_year)
-    
+
     data %&lt;&gt;%
       left_join(teams_ids, by = &#39;id.bref.team&#39;) %&gt;%
       select(
@@ -767,11 +878,13 @@ Now that we know our code works let’s build a function that takes a draft year
         everything()
       ) %&gt;%
       arrange(id.pick)
-    
-    if (return_message == T) {
+
+    if (
+      return_message == T # this will only run our message if we tell it to in our function
+        ) {
       players &lt;-
         data %&gt;% nrow
-      
+
       random_player &lt;-
         data %&gt;%
         dplyr::filter(totals.pts &gt; 0 &amp; totals.years_played &gt; 1) %&gt;%
@@ -779,7 +892,7 @@ Now that we know our code works let’s build a function that takes a draft year
         mutate(rank.total_points = 1:nrow(.)) %&gt;%
         dplyr::filter(!is.na(id.bref.player)) %&gt;%
         sample_n(1)
-      
+
       &quot;Congratulations you pulled in data for all &quot; %&gt;%
         paste0(
           players,
@@ -797,27 +910,27 @@ Now that we know our code works let’s build a function that takes a draft year
         ) %&gt;%
         message
     }
-    return(data)
+    return(data) # returns the final data frame, this is what we see!
   }</code></pre>
-<div class="ui inverted red segment">
+<div class="ui center aligned inverted red segment">
 <p>
-Ok let’s take her for a whirl and examine the 2013 draft.
+Lets put our function to work and make sure we can accurately pull in the data from <strong>2013 Draft</strong>.
 </p>
 </div>
-<pre class="r"><code>data &lt;- 
+<pre class="r"><code>data &lt;-
   get_nba_year_draft_data(draft_year = 2013,return_message = T)</code></pre>
 <pre><code>## Congratulations you pulled in data for all 60 players from the 2013 Draft
-## Have you heard of the #25 pick, Reggie Bullock?
-## He played 2 seasons &amp; ranked #34 in his draft class for total points scored!</code></pre>
-<div class="ui basic segment">
-<p class="ui center aligned">
-Let’s examine some of the results.
+## Have you heard of the #34 pick, Isaiah Canaan?
+## He played 2 seasons &amp; ranked #22 in his draft class for total points scored!</code></pre>
+<div class="ui center aligned basic segment">
+<p>
+Let’s repeat what we did earlier, this time we are going to add a few more columns and look at the first 15 picks.
 </p>
 </div>
-<pre class="r"><code>data %&gt;% 
+<pre class="r"><code>data %&gt;%
   select(id.round, id.pick, player, team, totals.years_played, totals.pts, per_game.pts, per_game.trb, per_game.ast, advanced.ws) %&gt;%
   mutate(totals.pts = totals.pts %&gt;% comma(digits = 0)) %&gt;% #some formating
-  head(15) %&gt;% #lets do the top 15 picks
+  head(15) %&gt;%  # Takes the top 15
   format_table(align = &#39;c&#39;)</code></pre>
 <table>
 <thead>
@@ -1017,13 +1130,11 @@ Let’s examine some of the results.
 </tr>
 </tbody>
 </table>
-<div class="ui basic segment">
-<div class="ui black segment">
+<div class="ui center aligned black segment">
 Oh Anthony Bennett…..
-</p>
-</div>
 <p><img class = "ui centered large image" src="https://usatthebiglead.files.wordpress.com/2014/01/anthony-bennett-jumps-when-touched-with-powerade-against-knicks.gif" title = "Anthony Bennett"></p>
 </div>
+<div class="ui center aligned basic segment">
 <div class="ui inverted circular segment">
 <h2 class="ui inverted header">
 Part II
@@ -1031,38 +1142,51 @@ Part II
 </div>
 <div class="ui inverted grey circular segment">
 <h2 class="ui inverted header">
-Scale Up the Function
+Scale the Function to the NBA Draft Heavens
 </h2>
 </div>
-<div class="ui basic segment">
-<p class="ui center aligned">
-Now that we have a working function that pulls in the data for any draft year we give it we can use that function to create one that either automatically pulls in every draft since NBA or BAA inception or pulls in the draft years that you give it.
+<div class="ui inverted blue circular segment">
+<h2 class="ui inverted header">
+Write the Complete Draft History Data to Disk
+</h2>
+</div>
+<div class="ui clearing divider"></div>
+<p>
+We now have demonstrated that our function works and will provide us for draft data for any valid year we give it. We can take this function and integrate it into another function that will let us pull in the complete NBA/BAA draft history or the specific draft years we want. We already put in the hard work creating the first function, this second function only has a few missing pieces before it will be up and running.
 </p>
 <p>
-Let’s build and test that function, it’s what we set out to today and won’t be much more work!
+We want our function to let us explicitly ask us whether we want the BAA data. We want our code to know what to do if we don’t identify an explicit range of drafts. In this case we want our code to return all the eligible drafts if the range is undefined. Finally Messagify this function to return a random fact about a player in the chosen range.
 </p>
+<p><a class="ui  red tag label"><strong>Let’s Do It!!</strong></a> <a class="ui teal tag label">It’s Only Going to Take a Minute or 2!</a> <a class="ui black tag label">Don’t Forget to Test the Function On Years You Are Interested in Seeing!!</a></p>
 </div>
 <pre class="r"><code>get_all_nba_draft_data &lt;- function(year_start = NA, year_end = NA,
                                    include_baa = T, return_message = T) {
-  
-  if (include_baa == T) {
-    year.first_draft &lt;-
-      1947 #first BAA year
-  } else{
-    year.first_draft &lt;- 
-      1950 #first NBA year
+
+  # This makes sure the first function is in your environment
+  if (&#39;get_nba_year_draft_data&#39; %in% ls() ){
+    #
   }
-  
+
+  if (
+    include_baa == T # asks us if we want BAA data, assumes we do
+    ) {
+    year.first_draft &lt;-
+      1947 # first BAA draft year
+  } else {
+    year.first_draft &lt;-
+      1950 # first NBA draft year
+  }
+
   if (year_start %&gt;% is.na) {
     year_start &lt;-
-      year.first_draft #if we specify when to start it overwrites startdate
+      year.first_draft # takes the first BAA or NBA draft year if we don&#39;t give our code a start year
   }
-  
+
   current_month &lt;-
     Sys.Date() %&gt;%
     month %&gt;%
     as.numeric
-  
+
   if (current_month &gt; 6) {
     year.most_recent_draft &lt;-
       Sys.Date() %&gt;%
@@ -1072,32 +1196,37 @@ Let’s build and test that function, it’s what we set out to today and won’
     year.most_recent_draft &lt;-
       Sys.Date() %&gt;%
       year %&gt;%
-      as.numeric() - 1 #same from before
+      as.numeric() - 1 # Takes the most recent draft if we don&#39;t identify an explicit end to the draft range
   }
-  
+
   if (year_end %&gt;% is.na) {
-    year_end &lt;- 
+    year_end &lt;-
       year.most_recent_draft #If we don&#39;t select an end draft year overwrite with the most recent
   }
-  
-  draft_years &lt;- 
+
+  draft_years &lt;-
     year_start:year_end #create a numeric vector of the draft years we want
-  
-  all_data &lt;- 
-    data_frame() #form an empty data_frame
-  
+
+  ## Loop through the selected draft years, get the data and append it to the master data frame
+
+  all_data &lt;-
+    data_frame() # form an empty data_frame that will act as the master data frame
+
   for (year in draft_years){
-    data &lt;- 
-      get_nba_year_draft_data(draft_year = year, return_message = F)
-    
-    all_data %&lt;&gt;%
-      bind_rows(data)
+    data &lt;-
+      get_nba_year_draft_data(draft_year = year, return_message = F) # we dont want to see a bunch of messages so lets turn it off for this
+
+    all_data %&lt;&gt;% # takes the master data frame
+      bind_rows(data) # binds the rows of the year&#39;s data frame to that
   }
-  
+
   if (return_message == T) {
     players &lt;-
-      all_data %&gt;% nrow
-    
+      all_data %&gt;%
+      nrow
+
+    ## We want this message to show us some random facts about one of the top 1000 scorers
+
     random_player &lt;-
       all_data %&gt;%
       dplyr::filter(totals.pts &gt; 0) %&gt;% #people who have scored
@@ -1106,7 +1235,7 @@ Let’s build and test that function, it’s what we set out to today and won’
       dplyr::filter(!is.na(id.bref.player)) %&gt;%
       slice(1:1000) %&gt;%  #take the top 1000s players by points
       sample_n(1) #take a sample of 1
-    
+
     &quot;Congratulations you pulled in data for &quot; %&gt;%
       paste0(
         players,
@@ -1128,16 +1257,24 @@ Let’s build and test that function, it’s what we set out to today and won’
       ) %&gt;%
       message
   }
-  return(all_data)
+  return(all_data) #returns the data
 }</code></pre>
-<pre class="r"><code>all_data &lt;- 
+<div class="ui basic segment">
+<p class="ui center aligned">
+The function should be loaded into your environment. Let’s test it out. Since the function is smart and makes assumptions if information isn’t given, you don’t need to input any assumptions, doing this will return the full NBA draft history inclusive of the BAA drafts.
+</p>
+<p>
+Oh yea, be patient this function might take a little while.
+</p>
+</div>
+<pre class="r"><code>all_data &lt;-
   get_all_nba_draft_data()</code></pre>
 <pre><code>## Congratulations you pulled in data for 7789 players from the 1947 to 2015 drafts
-## Have you heard of the #14 pick in the 1975 Draft, Joe Bryant?
-## He played 8 seasons &amp; ranks #731 all time in total points scored during your selected draft eras!</code></pre>
-<pre class="r"><code>all_data %&gt;% 
+## Have you heard of the #4 pick in the 1985 Draft, Xavier McDaniel?
+## He played 12 seasons &amp; ranks #170 all time in total points scored during your selected draft eras!</code></pre>
+<pre class="r"><code>all_data %&gt;%
   select(year.draft, id.round, id.pick, player, team, totals.years_played, totals.pts, per_game.pts, per_game.trb, per_game.ast, advanced.ws) %&gt;%
-  arrange(desc(totals.pts)) %&gt;% 
+  arrange(desc(totals.pts)) %&gt;%
   mutate(totals.pts = totals.pts %&gt;% comma(digits = 0)) %&gt;% #some formating
   head(15) %&gt;% #lets do the top 15 picks
   format_table(align = &#39;c&#39;)</code></pre>
@@ -1355,50 +1492,44 @@ Let’s build and test that function, it’s what we set out to today and won’
 </tr>
 </tbody>
 </table>
-<div class="ui basic segment">
-<p class="ui center aligned">
-We did it ladies and gentleman. We now have a function that can pull in any and all NBA or BAA drafts we give it.
-</p>
+<div class="ui center aligned basic segment">
 <p>
-Today’s tutorial ends here but we now have refined data gold ready for all sorts of interesting data analysis and visualization, things R also excels at.
+Now that we have the entire draft history in a data frame we can write it to disk so we have it locally.
 </p>
 </div>
-<div class="ui basic ui inverted blue segment">
+<pre class="r"><code>all_data %&gt;%
+  write_csv(path = &#39;data/nba_baa_drafts_1947_2015.csv&#39;) #pick where ever you want to save it this is just my choice.</code></pre>
+<div class="ui center aligned basic ui inverted blue segment">
 <h2 class="ui header">
 Parting Notes
 </h2>
 </div>
-<div class="ui basic segment">
+<div class="ui center aligned  basic segment">
 <p class="ui center aligned">
 We did it ladies and gentleman. We now have a function that can pull in any and all NBA or BAA drafts we give it.
 </p>
 <img class = "ui centered large image" src="http://www.survivingcollege.com/wp-content/uploads/2013/04/tumblr_mlmzl1vRWd1soiqg9o2_500.gif" title = "Jeah">
 <p>
-Today’s tutorial ends here but we now have refined data gold ready for all sorts of interesting data analysis and visualization, things R also excels at. Check back soon and I will have a new tutorial doing just this.
+Today’s tutorial ends here but we now have refined NBA draft data gold ready for all sorts of interesting data analysis and visualization, things R also excels at.
+<p>
+<p>
+Check back soon and for a tutorial that will teach how how to visualize and analyze this dataset.
 </p>
 <p>
-I hope you enjoyed this and recognize that R can do anything that Python does with ease and grace and if you ever hear someone say R isn’t good at web-scraping you can shake your head and laugh!
-</p>
-<div class="ui basic ui inverted blue segment">
-<h2 class="ui header">
-Parting Notes
-</h2>
-</div>
-<div class="ui basic segment">
-<p class="ui center aligned">
-We did it ladies and gentleman. We now have a function that can pull in any and all NBA or BAA drafts we give it.
-</p>
-<img class = "ui centered large image" src="http://www.survivingcollege.com/wp-content/uploads/2013/04/tumblr_mlmzl1vRWd1soiqg9o2_500.gif" title = "Jeah">
+I hope you enjoyed this and recognize that R can do anything that Python does with ease and grace.</p>
 <p>
-Today’s tutorial ends here but we now have refined data gold ready for all sorts of interesting data analysis and visualization, things R also excels at. Check back soon and I will have a new tutorial doing just this.
+Also, if you ever hear someone say R isn’t good at web-scraping you can shake your head and laugh!
 </p>
 <p>
-I hope you enjoyed this and recognize that R can do anything that Python does with ease and grace and if you ever hear someone say R isn’t good at web-scraping you can shake your head and laugh!
+You can find the code for the functions <a href = 'https://github.com/abresler/asb_r_tutorial_series/tree/master/python_to_r/nba/draft_scraper_09_10_2015/code' target = '_blank'>here</a> and I urge you to download or fork the repo and use the code whenever you need it!
 </p>
+<div class="ui center aligned inverted green segment">
 <p>
-You can find the code for the functions <a href = 'https://github.com/abresler/asb_r_tutorial_series/tree/master/python_to_r/nba/draft_scraper_09_08_2015/code' target = '_blank'>here</a> and I urge you to download or fork the repo and use the code whenever you need it!
+As always please don’t hesitate to reach out to me on <a href = 'https://twitter.com/abresler'>twitter</a> with any questions, comments and concerns!
 </p>
 </div>
+</div>
+<center>
 <div class="ui inverted red circular segment">
 <h2 class="ui inverted header">
 Shout
@@ -1409,8 +1540,25 @@ Shout
 Outs
 </h2>
 </div>
-
-
+</center>
+<div class="ui divided selection list">
+<a class="item">
+<div class="ui black horizontal label">
+<a href = 'https://twitter.com/hadleywickham' target="_blank">Hadley Wickham</a>
+</div>
+<small>Author of most of the amazing R packages we used today</small> </a>
+<a class="item">
+<div class="ui red horizontal label">
+<a href = 'http://savvastjortjoglou.com/' target="_blank">Savvas Tjortjoglou</a>
+</div>
+<small>Inspiration for this tutorial and basketball data blogger extraordinaire </small>
+</a>
+<a class="item">
+<div class="ui teal horizontal label">
+<a href = 'http://semantic-ui.com/' target="_blank">Semantic-UI</a>
+</div>
+<small>Web’s most beautiful open-source UI frame-work.</small>
+</a>
 </div>
 
 <script>
